@@ -1,0 +1,18 @@
+
+** (buffer-name)
+   返回缓冲区的名字
+** (buffer-file-name)
+   返回文件的名字
+   
+** (current-buffer)与（buffer-name）函数区别
+   （current-buffer)函数返回的是buffer本身，而不是缓冲区的名字，尽管经常调用
+   （current-buffer）函数返回的只是缓冲区的名字。
+** (switch-to-buffer arg)函数
+   一是切换缓冲区，二是切换显示窗口
+   （switch-to-buffer  (other-buffer)）
+** (set-buffer arg)函数
+   只是切换缓冲区，并不切换显示窗口。
+** （buffer-size）函数
+   返回缓冲区中字符数的计数
+** （point）函数
+   返回缓冲区中当前位点的计数
