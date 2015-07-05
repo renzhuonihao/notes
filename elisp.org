@@ -1,4 +1,5 @@
-
+用到这些内容进行编程的时候，最好C-h f/v看一下
+* 函数     
 ** (buffer-name)
    返回缓冲区的名字
 ** (buffer-file-name)
@@ -6,7 +7,7 @@
    
 ** (current-buffer)与（buffer-name）函数区别
    （current-buffer)函数返回的是buffer本身，而不是缓冲区的名字，尽管经常调用
-   （current-buffer）函数返回的只是缓冲区的名字。
+   （current-buffer）函数返回的只是缓冲区的名字
 ** (switch-to-buffer arg)函数
    一是切换缓冲区，二是切换显示窗口
    （switch-to-buffer  (other-buffer)）
@@ -16,3 +17,131 @@
    返回缓冲区中字符数的计数
 ** （point）函数
    返回缓冲区中当前位点的计数
+** (beginning-of-buffer)函数
+   将光标移动到缓冲区的开始位置，M-<
+** (end-of-buffer)函数
+   移动到缓冲区末尾，M->
+
+** (push-mark arg)
+   参数可选的一个函数，在arg位置处设置一个标记，并在标记环中记录原来标记的值，标记是缓冲区中的一个位置，即使
+   有一些文本被从缓冲区删除或有新文本加入缓冲区，标记仍将保持它的相对位置没有参数输入的话，在当前位置设置一个标记。
+   
+** （go-to-char arg)
+   将光标跳到本缓冲区的某个位置
+** (save-excursion body)函数
+   1.保存位点和标记的位置
+   2当这个函数体中的其他表达式都被求值后恢复位点和标记到相应位置
+   3保存原始的缓冲区并恢复它
+   该函数的返回值是body中最后一个表达式的值
+** (insert-buffer-substring oldbuf start end)函数
+   从第一个参量指定的缓冲区拷贝一个字符串，将其插入当前缓冲区
+** (get-buffer-creat bufname)函数
+   要么获得已命名的缓冲区，要么用给定的名字创建一个缓冲区
+** (append-to-buffer buf st end)函数
+   从当前缓冲区拷贝一个区域到指定的缓冲区，三个参量，buffer代表目的
+   ;缓冲区，另外两个代表当前缓冲区的区域的开始和结束位置。当前缓冲区光标不变
+** (mark-whole-buffer)
+   标记整个缓冲区C-x h
+** (erase-buffer)函数
+   清除当前缓冲区
+** (copy-to-buffer Buffer st end)
+   buffer为目标缓冲区，st和end为初始和结束位置。将当前缓冲区的字符串拷贝到名为b
+   uffer的缓冲区内，在拷贝前清除buffer缓冲区的内容，当前缓冲区光标不变，buffer缓冲区光标
+   在开头位置
+   
+** (interactive)函数
+   众多的参数：
+   “b”  参数是个存在的缓冲区的 *名字*
+   “B”  表示参数是个缓冲区的 *名字*
+   "p"  传送给函数的第一个参量将是一个处理过的前缀参数的值
+   “P”  类似于“p”,未处理过的不过 （配合 prefix-numeric-value使用
+   “*”  interactive所在的函数假设为f，如果使用f的缓冲区是只读的，就给出错误信号，*与另一个参量一起使用时，不需要换行符。
+   “r”   当前缓冲区位点和标记作为参量传给函数
+   "c"  交互表达式希望产生一个提示，参量将是一个字符
+** (point-min)
+   默认是1，在宽度没变化的情况下
+** （point-max）
+   类似(point-min)
+** or
+   逐一对每个参量求值，返回第一个 参量的值不是nil的 参量的值，否则nil
+** and
+   逐一对每个参量求值，返回nil或最后一个 参量的值
+** &optional 用在函数定义中
+   表该函数可以带参量调用，也可以不带参量调用
+** （prefix-numeric-value arg)
+   将一个 (interactive "P")产生的未加工的前缀参量转换为一个数字
+** （forward-line）
+   将光标移动到下易行的行首
+
+
+**  (search-forward target-string arg2 arg3 arg4）
+    1.参数解析：target-string参数是要寻找的字符（串）。arg2表查询范围，nil表示为缓冲区末尾。
+    arg3表示查询失败该怎么办，nil表示会发出一个出错信号,表示查询失败时返回t。arg4重复计数，正表示往后查询，负表示往前查询）
+    2.效果解析：查询成功，往前查的在目标字符串的第一个字符处设置位点；往后查的在目标字符串的
+    最后一个字符处设置位点。查询成功返回值是t。
+** (bufferp arg)
+   判断其参量是不是缓冲区
+** (char-to-string char)
+   将一个字符变换位字符串
+** (progn body）
+   依次执行body中的表达式，返回值为最后一个表达式的值
+   另外有函数prog1,prog2,与gn不同指出在于，返回值是第一，第二。。个表达式的值
+** (copy-region-as-kill beg end)
+   将从beg到end区域的文本复制到kill环中
+** (delete-region beg end)
+   删除一个区域的内容，而且你无法找回它
+
+** (buffer-substring beg end)
+   返回值为当前缓冲区从beg到end的字符串,不剪切
+** （kill-append string p)
+   第一个参量是字符串，第二个参量是谓词
+   将参数字符串接到kill环第一个元素上
+
+**  copy-region-as-kill和 kill-region
+    将光标/位点和标记之间的字符串拷贝/剪切下来，连续的调用这两个，s是给环上同一个元素（car 环）加东西。
+    首次调用会在环上生成一个新的元素，即（cons 新元素 环）
+** （setcar list s）
+   将表list的第一个变成 s
+**  (setcdr list s)
+    将表list的第二到最后设置为s
+** （nthcdr list）
+   连续对list做n次cdr
+** (yank)
+   绑定到C-y.将环的第一个元素复制上去
+** （yank-pop）
+   M-y。多次使用遍历环，依次将环的每个元素复制上去
+
+
+
+
+
+
+
+**  (sentence-end)
+    f返回值是句末的正则表达式
+** (re-search-forward regexp &optional arg2 arg3 arg4)
+   按照正则表达式的要求查询，re代表regexp，arg1代表正则表达式。arg2代表查询范围；arg3代表
+   查询失败的反应，nil蜂鸣，t返回nil值；arg4重复计数，正负代表向前和后查询。
+   如果找到了就将位点移动到当前找到的句子的结束处。并且返回值是真
+
+   
+
+
+
+
+
+
+**  （eobp）
+    位点位于缓冲区末尾时，返回真。
+* 变量
+** last-command
+   上一个命令
+** this-command
+   当前命令
+
+** kill-ring
+   kill环
+** kill-ring-max
+   环的最大长度
+** kill-ring-yank-pointer
+   指向环（的某个元素）的指针
