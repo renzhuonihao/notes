@@ -1,0 +1,175 @@
+#+STARTUP: overview
+#+TAGS: 软件包(a) 
+
+* 软件包管理 	
+** 简介
+   ubuntu使用了一种成为软件源的技术来提供系统中所需的软件资源。所谓的源就是一台包含了许多ubuntu软件的服务器。这台服务器采用了
+   特殊的技术构建而成，可以识别网络中ubuntu用户的安装软件指令，然后自动将用户所需要的软件传送到用户计算机中进行安装。
+** 使用
+   对于普通用户而言，只要在系统中一个叫做 *源列表* (etc/apt/sources.list) 的文件中添加源服务器的名称，就可以安装该服务器中
+   软件。
+** 注意
+   通过观察源列表中的文件，可以知道，这里只是添加的 *服务器的地址* ，而不是要下载的软件的地址，因此，要下载一些冷门的软件，应该用wget
+   或者通过dpkg的方式安装。
+** 刷新源列表
+   源列表发生任何更新，如添加或删除源列表/添加光盘作为源等，都需要刷新源列表。必须是 *联网状态* 。
+#+begin_src sh
+  sudo apt-get update
+#+end_src 
+* 通过编译源码的方式安装软件
+  [1) 构建编译环境
+  sudo apt-get install build-essential autoconf automake cvs subversion
+  [2)下载源码
+  wget http://...  
+  [3) 解压源码
+  [4) 编译安装，大多数软件源代码可以通过以下三条命令来进行编译安装
+#+begin_src sh 
+   ./configure
+   make
+   sudo make install
+#+end_src
+   _org-mode插入代码，先输入 <s ，然后按 TAB 即可。_
+* 软件包管理命令
+** apt系列
+*** 对系统所有的软件进行升级，之前一直跟刷新源列表的命令搞混.
+#+begin_src sh
+   sudo apt-get upgrade
+#+end_src
+*** 卸载软件
+#+begin_src sh
+    sudo apt-get remove package
+#+end_src
+*** 卸载软件，并删除配置文件
+#+begin_src sh
+    sudo apt-get --purge remove package
+#+end_src
+** dpkg系列
+*** 该命令最常用的功能就是安装deb包。
+#+begin_src sh
+   sudo dpkg -i pakagename.deb
+#+end_src 
+   即可安装deb包。
+   
+*** 卸载软件
+#+begin_src sh
+    dpkg -r package
+#+end_src
+*** 卸载并删除配置文件
+#+begin_src sh
+    dpkg -P package
+#+end_src
+
+* 进程简介
+** 守护进程
+   仅运行在后台，不与用户执行交互操作的一些进程，一般以 *字母d* 作为名称的结尾。如klogd,atd等
+
+* 网络
+** 配置TCP/IP
+   ifconfig可以查看和设置网络设备的TCP/IP参数，包括IP地址，子网掩码等。
+#+begin_src sh
+  sudo ifconfig eth0 192.168.2.2 netmask 255.255.255.0  设置网卡eth0的IP地址和子网掩码(netmask) 
+#+end_src
+** DNS
+*** 简介
+**** 网络中的资源及其ip地址
+     网络中的资源是通过一台台称为“服务器”的计算机来提供的。为了使用户更方便的访问这些资源，一个专门的机构给这些服务器分配了不同的地址。
+     为了方便管理，这些地址被限制为四组均小于255的数字，如192.168.2.2，这些地址被称为 *IP地址* 。
+**** DNS服务器
+     *IP地址* 虽然对于网络设备来说容易管理，但对于人来说不太“友好”。为了解决这个问题互联网管理机构又增加了一种专门的服务器，将这些
+     IP地址转换为人类友好的字符地址，如将64.233.189.147转换为www.google.com。
+**** 如何解析
+     当用户输入文字地址，如www.google.com，然后发送，该地址信息被送到DNS服务器，服务器在表格中查询www.google.com，得到该地址对应的IP
+     地址，如64.233.189.147,然后重新定向到实际IP地址，完成DNS转换。
+*** Ubuntu的DNS
+    对于Ubuntu而言，其也在系统内部维护了一个DNS服务器，这样就可以不用经过外部DNS服务器就完成域名到IP地址的转换.
+*** 配置文件
+**** /etc/host.conf 
+     指定如何解析主机名。
+#+begin_example 
+    # The "order" line is only used by old versions of the C library.
+    order hosts,bind
+    multi on
+#+end_example
+    order指定查询顺序。本列是指先使用etc/hosts查询，然后用DNS服务。
+**** /etc/resolv.conf 
+     据说是主要配置文件，但我没看懂
+**** /etc/hostname
+     设置系统主机名
+**** /etc/hosts
+#+begin_example 
+     127.0.0.1	localhost
+     127.0.1.1	renzhuonihao
+     
+# The following lines are desirable for IPv6 capable hosts
+     ::1     ip6-localhost ip6-loopback
+     fe00::0 ip6-localnet
+     ff00::0 ip6-mcastprefix
+     ff02::1 ip6-allnodes
+     ff02::2 ip6-allrouters
+#+end_example
+     设置一个简单的DNS表格，可以处理本机简单的DNS服务。
+     可以将一些常用网站的IP地址加入该文件中，在输入网址后由本机完成DNS转换，不用连接到外部DNS服务器上，这样可以提高网络性能。
+#+begin_example
+   # IP地址              主机名      别名  
+     64.233.189.104 www.google.com google
+     220.181.43.121 mp3.baidu.com mp3
+#+end_example
+     _org模式下插入例子，输入 <e ,按TAB即可._
+*** nslookup
+    查询DNS服务器中域名与IP地址的映射关系。这个在配置个人的DNS时很有用。
+    可以查询常用网址，然后将得到的结果加入到/etc/hosts中去。
+
+** ssh服务
+*** 服务器的架设
+    (1) 安装SSH服务器软件，这里用openssh-server软件作为SSH服务器。
+#+begin_src sh
+    sudo apt-get install openssh-server
+#+end_src
+    (2) 启动SSH服务
+#+begin_src sh
+    sudo /etc/init.d/ssh start
+#+end_src
+    (3) 配置使性能提升。配置文件为/etc/ssh/sshd_config.
+#+begin_example
+    Port 22    采用的端口号。
+    Protocol 2 采用的ssh协议的版本。
+#+end_example
+*** 登录到ssh服务器。
+    使用ssh命令登录到ssh服务器为192.168.1.1。假设SSH服务器上有一个名为west的用户。
+#+begin_src sh
+    ssh west 192.168.1.1
+#+end_src
+    剩下的自由发挥。
+*** 分发ssh密钥
+1. 生成密钥
+   在分发前，应该先生成密钥。生成密钥的命令时ssh-keygen.
+#+begin_src sh
+   ssh-keygen -d    -d参数表示生成SSH2.0版本的密钥。
+#+end_src 
+2. 输入要保存密钥的目录，默认是用户的主目录，也可以自行设定。
+3. 给密钥加密解密的，没看懂。
+4. 生成完会显示一些信息。
+5. 在SSH *服务器* 用户主目录中，建立一个名为.ssh 的目录。
+#+begin_src sh
+   mkdir ~/.ssh
+#+end_src
+6. 将公钥放入上一步建立的目录中。
+7. 修改服务器中密钥的访问权限为仅root可读写。
+#+begin_src sh 
+   chmod 600 blog_dsa.pub
+#+end_src
+   SSH服务器的要求。
+8. 将密钥的文件名改为authorized_key
+#+begin_src sh
+   mv blog_dsa.pub authorized_key
+#+end_src
+   这个也是SSH服务器的要求
+9. 登录验证
+
+#+begin_src c
+   #include <stdio.h>
+   int main(int i){
+   printf("hello,world!\n");
+   return 0;
+   }
+#+end_src
