@@ -1,6 +1,7 @@
 #+STARTUP: overview
 #+TAGS: 软件包(a) 
-
+linux-base
+[[./all-in-one.org]]
 * 软件包管理 	
 ** 简介
    ubuntu使用了一种成为软件源的技术来提供系统中所需的软件资源。所谓的源就是一台包含了许多ubuntu软件的服务器。这台服务器采用了
@@ -31,6 +32,12 @@
    _org-mode插入代码，先输入 <s ，然后按 TAB 即可。_
 * 软件包管理命令
 ** apt系列
+*** 更新特定的包
+    在apt-get命令中的“install”选项后面接上“--only-upgrade"来
+    更新一个特定的包
+#+begin_src sh
+    sudo apt-get install emacs --only-upgrade
+#+end_src
 *** 对系统所有的软件进行升级，之前一直跟刷新源列表的命令搞混.
 #+begin_src sh
    sudo apt-get upgrade
@@ -165,11 +172,3 @@
 #+end_src
    这个也是SSH服务器的要求
 9. 登录验证
-
-#+begin_src c
-   #include <stdio.h>
-   int main(int i){
-   printf("hello,world!\n");
-   return 0;
-   }
-#+end_src

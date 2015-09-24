@@ -1,0 +1,69 @@
+
+ Xah Emacs tutorial
+[[./all-in-one.org]]
+* 看日历
+  调用 *calendar* 函数。
+  要关掉日历窗口，按 *q* 。
+* 取色
+  列出所有的颜色和他们的16进制的RGB值。
+  调用 *list-colors-display* 
+* 如何在一个段落的每一行前加一个前缀？(比如#或者//)
+  先选择一块区域。
+  调用 *string-rectangle* 函数。或者按下 C-x r t 键，
+  再输入要插入的前缀。
+* 如何搜索当前光标下的字符串？
+  按下 C-s C-w可以搜索当前光标下的单词。
+* 正则表达式对文本的操作
+  调用以下三个函数：
+  list-matching-lines
+  delete-matching-lines
+  delete-non-matching-lines
+  可以分别列出，删除相应的正则表达式匹配的行。
+* 如何高亮一个单词或高亮某一正则匹配的字符串？
+  调用以下三个函数
+  highlight-phrase
+  highlight-regexp
+  highlight-lines-matching-regexp
+* 如何让非打印字符显形？
+  开启whitespace-mode .
+* 要多次复制粘贴同一区域，如何做？（寄存器的使用）
+  先选中一块区域，然后按下C-x r s 即调用 copy-to-register函数，再给这一区域起个名字如”1“或”a“。
+  C-x r i 调用insert-register函数插入该区域
+* ibuffer 利器，列出缓冲区，带高亮
+  这在处理多个buffer时很有用。以下是常用快捷键。
+  | *key* | *Purpose*            |
+  | m     | Mark                 |
+  | u     | Unmark               |
+  | *u    | Mark unsaved         |
+  | S     | Save marked buffer   |
+  | D     | Close marked buffers |
+* ido 利器，切换缓冲区和打开文件很有用。详情见配置文件
+* 文件操作
+  调用 *dired* 函数。
+*** 标记多个文件进行操作。
+    | *key* | *purpose*              |
+    | m     | mark a file            |
+    | u     | unmark                 |
+    | U     | unmark all marked      |
+    | %m    | mark by pattern(regex) |
+    比如，要匹配所有org文件，先输入%m，再输入\.org$>
+*** 重命名，非常方便快捷
+    | *function*             | *key*   | *purpose*              |
+    | dired-toggle-read-only | C-x C-q | 开启编辑模式           |
+    | wdired-finish-edit     | C-c C-c | 提交更改commit changes |
+    | wdired-abort-changes   | C-c Esc | 取消更改               |
+    提交更改，有种用git的感觉
+* 书签
+  用于快速打开文件，不过暂时没发现有啥用
+  | *function*          | *key*               | *purpose*    |
+  | bookmark-set        | C-x r m             | 添加书签     |
+  | bookmark-bmenu-list | C-x r l             | 列出书签列表 |
+  | book-mark-save      | s while in bookmark | 保存书签     |
+
+
+
+
+
+
+
+

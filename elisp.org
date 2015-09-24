@@ -1,3 +1,5 @@
+elisp
+[[./all-in-one.org]]
 用到这些内容进行编程的时候，最好C-h f/v看一下
 * 函数     
 ** (buffer-name)
@@ -145,3 +147,4 @@
    环的最大长度
 ** kill-ring-yank-pointer
    指向环（的某个元素）的指针
+[[./all-in-one.org]]

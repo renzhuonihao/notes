@@ -1,0 +1,11 @@
+* all-in-one
+[[./elisp.org]]
+
+[[./linux-base.org]]
+
+[[./learn-org.org]]
+
+[[./learn-emacs.org]]
+
+[[./algorithm.org]]
+
