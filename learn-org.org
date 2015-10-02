@@ -1,6 +1,12 @@
-org模式学习
-[[./all-in-one.org]]
+#+TITLE： org模式学习
+#+AUTHOR： 任卓
+#+EMAIL： renzhuonihao@gmail.com
+#+DATE: <2015-09-29 二>
+#+KEYWORDS: emacs org
+#+DESCRIPTION: This page is my org-mode note
+
 * org模式学习
+  [[./all-in-one.org]]
 ** 在行内插入代码
    两种写法， ~3 + 4~ ，或者 =3 + 4= .
 ** 插入代码块或者例子
@@ -12,43 +18,69 @@ org模式学习
    + 编辑完毕，按下C-x C-s调用org-edit-src-save将窗格内的代码保存到原始的代码块中
    + 再按下C-c '调用org-edit-special函数，关掉刚才创建的新的窗格
 ** 插入列表
-**** 插入无序列表1
-+ 无序列表1
-  + 内容1
-  + 内容2
-  + 内容3
-**** 插入无序列表2
-   - 无序列表2
-     - 内容1
-     - 内容2
-     - 内容3
-**** 插入有序列表
-1. 内容1
-2. 内容2
-3. 内容3
+   + 无序列表用‘-’ ‘+’ 或 ‘*’开头。
+   + 有序列表以‘1.’ 或 ‘1)’开头。
+   + 描述列表用‘::’将项和描述分开。
+   + 有序列表和无序列表都以 *缩进* 表示层级。只要对齐缩进，不管是
+     换行还是分块都认为是处于当前列表项。
+   + 下一行的缩进比上一行少时表示 *列表的结束* 。
+   + 总而言之，缩进对列表有着至关重要的影响。 
+ My favourite scenes are (ine the oreder)
+  1. The attack of him 
+  2. Eowyn fight with mehah
+     + this was already is him
+     + I really acceptyou
++ new list 
+Improtant acitr oinare:
+  - Eldasd :: he plays frodo
+  - Sean Aus :: He plays sam,Frod's friend
 ** 插入链接
    两对中括号
    [[http://www.baidu.com]]
    或三对中括号
    [[http://www.baidu.com][百度]]
 
-** 插入代码的快速模版
+** 一些特殊的标记
+   *粗体*
+   
+   /斜体/
+   
+   +删除线+
+   
+   _下划线_
+   
+   下标： H_2 O
+   
+   上标： E=mc^2
+   
+   等宽字： =git= 或者 ~git~
+** 段落
+   对于 *单个回车* 换行的文本，认为其属于 *同一个段落* 。在导出的时候将会转化为不换行的
+   同一段。如果要 _新起一个段落_ ，需要 _留出一个空行_ 。
+** 分割线
+   五条短线以上为分割线。
+   比如： 
+   -----
+** 导出和发布
+*** 文档元数据
+    见本文档开头。
+*** 内容元数据
     org模式支持快速插入代码模版，这是通过一种基本的模版扩展机制完成的。
     首先输入 < ，而后输入某个字母，再按下Tab键即可完成，以下是几个例子。
-#+begin_example
-    <s
-    <e
-    <q
-    <v
-    <c
-    <l
-    <L
-    <h
-    <H
-    <a
-    <A
-    <i
-    <I
-#+end_example
-    可以自己添加新的模版，通过配置 *org-structure-template-alist* 变量完成
+| before TAB | after TAB    | 含义                                                   |
+| <s         | src          | 插入源代码                                             |
+| <e         | example      | 插入例子                                               |
+| <q         | quote        | 缩进区块，通常用于引用，与默认格式相比左右都会留出缩进 |
+| <v         | verse        | 默认内容不换行，留出空行才换行，这样的话可以普通换行   |
+| <c         | center       | 居中区块                                               |
+| <l         | latex        |                                                        |    
+| <h         | html         | 网页                                                 |    
+| <i         | include file | 包含文件                                               |
+|            | #+CAPTION:   | 表格或图片的标题，方便交叉引用                         |
+    可以自己添加新的模版，通过配置 *org-structure-template-alist* 变量完成。
+*** 预览要发布的内容
+    调用 =org-export-as-html-and-open= 函数    
     
+
+** 插入时间戳
+   C-c . 调用 ~org-time-stamp~ 函数来插入时间戳。

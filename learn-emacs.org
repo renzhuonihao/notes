@@ -59,11 +59,4 @@
   | bookmark-set        | C-x r m             | 添加书签     |
   | bookmark-bmenu-list | C-x r l             | 列出书签列表 |
   | book-mark-save      | s while in bookmark | 保存书签     |
-
-
-
-
-
-
-
-
+* 
