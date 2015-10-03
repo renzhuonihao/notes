@@ -3,7 +3,62 @@ algorithm
 * 平衡搜索树
 ** AVL trees
 ** 2-3 trees
-** 2-3-4 trees
+** 2-3-4 trees #<<2-3-4 tree>>
 ** B-trees
 ** Red-black trees
-   
+*** Binary search Tree structure with extra *color* field for each node,satisfying:
+   _Red-black properties_:
+    1. Every node is either _red_ or _black_.
+    2. The root&leaves(nils) are black
+    3. #<<pro3>> Every red note has black parent.
+    4. #<<pro4>> All simple paths from a node x to a descendant
+       leaf of x have same number black nodes=black-height(x).
+       black-height(x) does count x itself.
+*** Height of red-black tree
+    red-black tree with n keys has height h <= 2lg(n+1)=O(lgn)
+    _Proof sketch_:
+     1. merge each red node into its black parent. 
+	this will generate a tree(namely [[2-3-4 tree][2-3-4 tree]])has properties:
+	- every internal node has 2-4 children
+	- every leaf has same depth namely black-height(root) by [[pro4][property 4]]
+     2. the height of this 2-3-4 tree is h',the height of black-red tree is h.
+	- # leaves(number of leaves) = n (number of keys) + 1
+	- in 2-3-4 tree 2^h'<= #leaves <=4^h',that is , h' <= lg(n+1)
+	- because of [[pro3][property 3]] ,h <= 2h'
+     3. so ,h <= 2lg(n+1).
+*** operations on red-black tree 
+    (update the red-black tree and keep the red-black-properties)
+    - BST operation
+    - color changes 
+    - restructing of links via _rotations_.
+       _Rotation_:
+       详情见公开课视频。[[http://open.163.com/movie/2010/12/9/J/M6UTT5U0I_M6V2TJ49J.html][平衡搜索树]]
+       presents BST property.
+    - 这三个都是基本的操作，要写成基本的函数操作来操作红黑树。
+**** RB-Insert(x)
+***** _Idea_:
+      - Tree-insert(x)
+      - color node red
+      - problem parent might be red(violate property 3,违反性质3)
+      - move violation up the tree via recoloring
+	until we can fix violation via rotation&recoloring
+***** _伪代码_: (两种大情况AB，AB每个再分三种情况处理)
+#+begin_example
+      RB-Insert(T_x):
+      Tree-Insert(T_x)
+      color[x]<-RED
+      while x != root[x] and color[x] = RED{
+         if p[x]=left[p[p[x]]]{ //情况A
+	 then y<-right[p[p[x]]]
+	    if color[y] = red
+	       then <case 1> //recolor x结点为红，父节点也为红，祖父节点肯定为黑，若叔结点为红，则为第一种情况，重新上色，祖父结点变为红，父和叔结点变为黑
+	    else if x=right[p[x]]
+	       then <case 2> //violation region is Z,冲突区域是Z形，rotate之，转换为情况3
+	       <case 3> //冲突区域是直线形先rotate后变色
+	 }
+	 else <case B>
+	    same as <case A>
+      }
+      color[root[T]] <- BLACK
+#+end_example
+** 剩余要做的，学习其他的RB树操作并完成一种语言的实现。

@@ -39,7 +39,15 @@ Improtant acitr oinare:
    [[http://www.baidu.com]]
    或三对中括号
    [[http://www.baidu.com][百度]]
-
+** 插入内部链接
+   可以实现文档内部的跳转。
+   1. 先定义一个锚点。 #<<target>>
+   2. 如下方式可以设置到target的链接
+      [[target]] 或 [[target][猛击这里]]
+#+begin_example
+      锚点这样表示： #<<target>>
+      这样写可以跳转到锚点： [[target]] 或 [[target][猛击这里]]
+#+end_example
 ** 一些特殊的标记
    *粗体*
    
