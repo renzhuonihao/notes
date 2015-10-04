@@ -2,74 +2,75 @@
 #+TAGS: 软件包(a) 
 linux-base
 [[./all-in-one.org]]
-* 软件包管理 	
-** 简介
-   ubuntu使用了一种成为软件源的技术来提供系统中所需的软件资源。所谓的源就是一台包含了许多ubuntu软件的服务器。这台服务器采用了
-   特殊的技术构建而成，可以识别网络中ubuntu用户的安装软件指令，然后自动将用户所需要的软件传送到用户计算机中进行安装。
-** 使用
-   对于普通用户而言，只要在系统中一个叫做 *源列表* (etc/apt/sources.list) 的文件中添加源服务器的名称，就可以安装该服务器中
-   软件。
-** 注意
-   通过观察源列表中的文件，可以知道，这里只是添加的 *服务器的地址* ，而不是要下载的软件的地址，因此，要下载一些冷门的软件，应该用wget
-   或者通过dpkg的方式安装。
-** 刷新源列表
-   源列表发生任何更新，如添加或删除源列表/添加光盘作为源等，都需要刷新源列表。必须是 *联网状态* 。
-#+begin_src sh
-  sudo apt-get update
-#+end_src 
-* 通过编译源码的方式安装软件
-  [1) 构建编译环境
-  sudo apt-get install build-essential autoconf automake cvs subversion
-  [2)下载源码
-  wget http://...  
-  [3) 解压源码
-  [4) 编译安装，大多数软件源代码可以通过以下三条命令来进行编译安装
-#+begin_src sh 
-   ./configure
-   make
-   sudo make install
-#+end_src
-   _org-mode插入代码，先输入 <s ，然后按 TAB 即可。_
-* 软件包管理命令
-** apt系列
-*** 更新特定的包
-    在apt-get命令中的“install”选项后面接上“--only-upgrade"来
-    更新一个特定的包
-#+begin_src sh
-    sudo apt-get install emacs --only-upgrade
-#+end_src
-*** 对系统所有的软件进行升级，之前一直跟刷新源列表的命令搞混.
-#+begin_src sh
-   sudo apt-get upgrade
-#+end_src
-*** 卸载软件
-#+begin_src sh
-    sudo apt-get remove package
-#+end_src
-*** 卸载软件，并删除配置文件
-#+begin_src sh
-    sudo apt-get --purge remove package
-#+end_src
-** dpkg系列
-*** 该命令最常用的功能就是安装deb包。
-#+begin_src sh
-   sudo dpkg -i pakagename.deb
-#+end_src 
-   即可安装deb包。
-   
-*** 卸载软件
-#+begin_src sh
-    dpkg -r package
-#+end_src
-*** 卸载并删除配置文件
-#+begin_src sh
-    dpkg -P package
-#+end_src
+* 软件包管理 
+** 配置文件的解释
+*** 源列表是/etc/apt/source.list的配置文件。
+    一个典型的/etc/apt/source.list如下：（前两行是模版，后面的是本机的配置文件）
+#+begin_example
+    deb http://site.example.com/debian distribution component1 component2 component3
+    deb-src http://site.example.com/debian distribution component1 component2 component3
+    
+    deb http://security.ubuntu.com/ubuntu precise-security main restricted
+    deb-src http://security.ubuntu.com/ubuntu precise-security main restricted
+    deb http://security.ubuntu.com/ubuntu precise-security universe
+    deb-src http://security.ubuntu.com/ubuntu precise-security universe
+    deb http://security.ubuntu.com/ubuntu precise-security multiverse
+    deb-src http://security.ubuntu.com/ubuntu precise-security multiverse
+#+end_example
+    - 以 *deb* 开头代表编译好的包， *deb-src* 代表源代码。
+    - *distribution* 代表发行版本，比如下面的 precise-security。
+    - *compenent* 的说明：
+      | *main*       | Officailly supported software                                       |
+      | *restricted* | Supported software that is not available under a complete license   |
+      | *universe*   | Communnity maintained software,i.e.not offically supported software |
+      | *multiverse* | Software that is not free                                           |
+*** apt的缓存文件/var/lib/apt/lists
+    - 更改了/etc/apt/source.list，需要用 ~apt-get update~ 更新index。更新的index文件在 /var/lib/apt/lists里。
+    - apt-cache是一个软件包管理工具，可以查询apt的二进制包软件 *缓存文件* 。实际上查询的是
+      /var/lib/apt/lists文件夹中的各个文档的信息。
+** 安装ppa
+   PPA，表示 Personal Package Archives，也就是个人软件包集。
+   有很多软件因为种种原因，不能进入官方的 Ubuntu 软件仓库。 为了方便 Ubuntu 用户使用，launchpad.net 提供了 ppa，允许用户建立自己的软件仓库，
+   自由的上传软件。PPA 也被用来对一些打算进入 Ubuntu 官方仓库的软件，或者某些软件的新版本进行测试。
+   PPA 上的软件极其丰富，如果 Ubuntu 官方仓库中缺少您需要的某款软件，可以去 PPA 上找找看。
+   一个典型的例子如下：
+#+begin_example
+   $ sudo add-apt-repository ppa:wiznote-team
+   $ sudo apt-get update
+   $ sudo apt-get install wiznote
+#+end_example
+** 软件包管理命令
+*** apt常用操作
+    1. 更新特定的包
+       在apt-get命令中的“install”选项后面接上“--only-upgrade"来
+       更新一个特定的包
+       ~sudo apt-get install emacs --only-upgrade~
+    2. 对系统所有的软件进行升级，之前一直跟刷新源列表的命令搞混.
+       ~sudo apt-get upgrade~
+    3. 卸载软件
+       ~sudo apt-get remove package~
+    4. 卸载软件，并删除配置文件
+       ~sudo apt-get --purge remove package~
+    5. 三个命令的区别：
+   | apt-get update       | 更新软件列表,更改源列表后使用，更新的是index |
+   | apt-get upgrade      | 更新软件                                 |
+   | apt-get dist-upgrade | 更新系统版本                           |
+*** dpkg常用操作，针对下载下来的二进制包
+    1. 该命令最常用的功能就是安装deb包。
+       ~sudo dpkg -i pakagename.deb~
+       即可安装deb包。
+    2. 卸载软件
+       ~dpkg -r package~
+    3. 卸载并删除配置文件
+       ~dpkg -P package~
 
-* 进程简介
-** 守护进程
-   仅运行在后台，不与用户执行交互操作的一些进程，一般以 *字母d* 作为名称的结尾。如klogd,atd等
-
+*** apt-cache
+    1. 获取包的相关信息，如说明，大小，版本等。
+       ~apt-cache show package~
+    2. 搜索软件包，可用正则表达式
+       ~apt-cache search package~
+    3. 显示软件包的安装状态和版本信息
+       ~apt-cache policy package_name~
 * 网络
 ** 配置TCP/IP
    ifconfig可以查看和设置网络设备的TCP/IP参数，包括IP地址，子网掩码等。
@@ -172,3 +173,4 @@ linux-base
 #+end_src
    这个也是SSH服务器的要求
 9. 登录验证
+   
